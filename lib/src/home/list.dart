@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
+import '../../widgets/listItemTile.dart';
 
-class Content extends StatefulWidget {
+class List extends StatefulWidget {
   @override
-  _ContentState createState() => _ContentState();
+  _ListState createState() => _ListState();
 }
 
-class _ContentState extends State<Content> {
+class _ListState extends State<List> {
   final _lists = [
     {
       'title': '新晋网红小脆蟹的试吃报告新晋网红小脆蟹的试吃报告新晋网红小脆蟹的试吃报告',
@@ -43,61 +44,11 @@ class _ContentState extends State<Content> {
     final _picUrl = item['picUrl'];
     final _likeNum = item['likeNum'];
 
-    return new Card(
-      child: new Column(
-        children: <Widget>[
-          new Container(
-            child: new Text(
-              '$_likeNum 人喜欢', 
-              style: new TextStyle(
-                fontSize: 18.0,
-                color: Colors.grey[500]
-              ),
-              textAlign: TextAlign.right,
-            ),
-            height: 60,
-            alignment: Alignment.centerLeft,
-            padding: new EdgeInsets.symmetric(horizontal: 16.0),
-          ),
-          new Container(
-            child: new Image.network(
-              _picUrl,
-              fit: BoxFit.cover,
-            ),
-            height: 200,
-            width: double.infinity,
-          ),
-          new Container(
-            child: new Text(
-              _title,
-              textAlign: TextAlign.left,
-              style: new TextStyle(
-                fontSize: 22.0,
-                color: Colors.black
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            alignment: Alignment.centerLeft,
-            padding: new EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
-          ),
-          new Container(
-            child: new Text(
-              _subTitle,
-              textAlign: TextAlign.left,
-              style: new TextStyle(
-                fontSize: 16.0,
-                color: Colors.grey[500]
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-            alignment: Alignment.centerLeft,
-            padding: new EdgeInsets.all(16.0),
-          ),
-        ],
-      ),
-      margin: new EdgeInsets.symmetric(vertical: 8.0),
+    return new ListItemTile(
+      title: _title,
+      subTitle: _subTitle,
+      picUrl: _picUrl,
+      likeNum: _likeNum,
     );
   }
 
@@ -107,15 +58,14 @@ class _ContentState extends State<Content> {
       child: new CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
-            expandedHeight: 150.0,
-            flexibleSpace: const FlexibleSpaceBar(
-              title: Text('浪漫旅行'),
-            ),
+            title: Text('浪漫旅行'),
             actions: <Widget>[
               IconButton(
                 icon: const Icon(Icons.supervised_user_circle),
                 tooltip: 'Add new entry',
-                onPressed: () { /* ... */ },
+                onPressed: () {
+                  Navigator.pushNamed(context, '/userInfo');
+                },
               ),
             ],
           ),
