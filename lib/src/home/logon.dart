@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import '../../utils/httpUtil.dart';
 
 class Logon extends StatefulWidget {
   @override
@@ -10,6 +11,39 @@ class _LogonState extends State<Logon> {
   final uerNameController = TextEditingController();
 
   final passwordController = TextEditingController();
+
+  void requestLogon(params) async {
+    var json = await HttpUtil.request(
+      '/users',
+      method: HttpUtil.POST,
+      data: params
+    );
+
+    if(json == null){
+      return;
+    }
+
+    if(json['result'] != 100){
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          content: Text(
+            json['message'],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('确定', style: TextStyle(color: Colors.black),),
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+            ),
+          ],
+        ),
+      );
+    }else{
+      print('注册成功！');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +90,12 @@ class _LogonState extends State<Logon> {
                     ),
                     color: Colors.black87,
                     borderRadius: BorderRadius.all(Radius.circular(50)),
-                    onPressed: () {},
+                    onPressed: () {
+                      requestLogon({
+                        'name': uerNameController.text,
+                        'password': passwordController.text,
+                      });
+                    },
                   ),
                 ],
               ),
