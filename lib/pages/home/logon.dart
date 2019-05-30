@@ -53,7 +53,22 @@ class _LogonState extends State<Logon> {
         ),
       );
     }else{
-      Navigator.of(context).pushNamedAndRemoveUntil('/list', (Route<dynamic> route) => false);
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          content: Text(
+            '注册成功！',
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('确定', style: TextStyle(color: Colors.black),),
+              onPressed: () {
+                Navigator.of(ctx).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+              },
+            ),
+          ],
+        ),
+      );
     }
   }
 
