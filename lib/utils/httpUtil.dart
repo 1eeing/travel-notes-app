@@ -1,6 +1,12 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:cookie_jar/cookie_jar.dart';
 
 class HttpUtil {
+  HttpUtil(BuildContext context) {
+    this.context = context;
+  }
+  BuildContext context;
   // global dio object
   static Dio dio;
 
@@ -17,7 +23,7 @@ class HttpUtil {
   static const String DELETE = 'delete';
 
   // request method
-  static Future<Map> request (
+  Future<Map> request (
     String url, 
     { data, method }) async {
 
@@ -39,8 +45,9 @@ class HttpUtil {
 
       Dio dio = createInstance();
 
-      // 添加拦截器，设置csrfToken
+      // 添加拦截器
       // String csrfToken;
+      dio.interceptors.add(CookieManager(CookieJar()));
       // dio.interceptors.add(InterceptorsWrapper(
       //   onRequest: (Options options) {
       //     if(csrfToken == null) {
@@ -56,6 +63,12 @@ class HttpUtil {
       //       return options;
       //     }
       //   }
+      //   onError: (DioError e) {
+      //     // 授权失效拦截器
+      //     if(e.response.statusCode == 501){
+      //         Navigator.pushNamedAndRemoveUntil(context, '/', (Route<dynamic> route) => false);
+      //     }
+      //   }
       // ));
 
       var result;
@@ -68,8 +81,14 @@ class HttpUtil {
         // 打印响应相关信息
         print('响应数据：' + response.toString());
       } on DioError catch (e) {
-        // 打印请求失败相关信息
-        print('请求出错：' + e.toString());
+        if(e.response == null){
+          print('请求出错：' + e.request.toString() + '，详情信息：' + e.message);
+        }else if(e.response.statusCode == 501){
+          print('授权失效，回到首页');
+          Navigator.pushNamedAndRemoveUntil(context, '/', (Route<dynamic> route) => false);
+        }else{
+          print('请求出错：' + e.toString());
+        }
       } 
 
       return result;

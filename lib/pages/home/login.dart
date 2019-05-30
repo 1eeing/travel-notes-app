@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'dart:convert';
+import '../../utils/userInfo.dart';
 import '../../utils/httpUtil.dart';
 
 class Login extends StatefulWidget {
@@ -24,7 +26,7 @@ class _LoginState extends State<Login> {
   }
 
   void requestLogin (params) async {
-    var json = await HttpUtil.request(
+    var json = await HttpUtil(context).request(
       '/login/login',
       method: HttpUtil.POST,
       data: params,
@@ -52,6 +54,7 @@ class _LoginState extends State<Login> {
         ),
       );
     }else{
+      UserInfo.updateUserInfo(jsonEncode(json['data']));
       Navigator.of(context).pushNamedAndRemoveUntil('/list', (Route<dynamic> route) => false);
     }
   }

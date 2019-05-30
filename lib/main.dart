@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import './src/list/index.dart';
-import './src/articleDetail/index.dart';
-import './src/userInfo/index.dart';
-import './src/addArticle/index.dart';
-import './src/home/index.dart';
-import './src/home/login.dart';
-import './src/home/logon.dart';
+import './pages/list/index.dart';
+import './pages/articleDetail/index.dart';
+import './pages/userInfo/index.dart';
+import './pages/addArticle/index.dart';
+import './pages/home/index.dart';
+import './pages/home/login.dart';
+import './pages/home/logon.dart';
 // import 'package:flutter/services.dart';
 
 void main() {
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
         '/logon': (BuildContext context) => new Logon(),
         '/list': (BuildContext context) => new ListContainer(),
         '/articleDetail': (BuildContext context) => new ArticleDetail(),
-        '/userInfo': (BuildContext context) => new UserInfo(),
+        '/userInfo': (BuildContext context) => new UserInfoPage(),
         '/addArticle': (BuildContext context) => new AddArticle(),
       },
     );

@@ -25,7 +25,7 @@ class _LogonState extends State<Logon> {
   }
 
   void requestLogon(params) async {
-    var json = await HttpUtil.request(
+    var json = await HttpUtil(context).request(
       '/users',
       method: HttpUtil.POST,
       data: params
