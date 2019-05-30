@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import '../../utils/httpUtil.dart';
 
 class Logon extends StatefulWidget {
@@ -8,9 +9,20 @@ class Logon extends StatefulWidget {
 }
 
 class _LogonState extends State<Logon> {
-  final uerNameController = TextEditingController();
+  final userNameController = TextEditingController();
 
   final passwordController = TextEditingController();
+
+  bool isButtonDisabled = true;
+
+  void validator() {
+    RegExp userNameReg = new RegExp(r'(\d{11})');
+    RegExp passwordReg = new RegExp(r'(\d{6,12})');
+
+    setState(() {
+      isButtonDisabled = userNameReg.hasMatch(userNameController.text) && passwordReg.hasMatch(passwordController.text) ? false : true;
+    });
+  }
 
   void requestLogon(params) async {
     var json = await HttpUtil.request(
@@ -41,7 +53,7 @@ class _LogonState extends State<Logon> {
         ),
       );
     }else{
-      print('注册成功！');
+      Navigator.of(context).pushNamedAndRemoveUntil('/list', (Route<dynamic> route) => false);
     }
   }
 
@@ -56,21 +68,33 @@ class _LogonState extends State<Logon> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   TextField(
-                    controller: uerNameController,
+                    controller: userNameController,
                     autofocus: false,
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: '请输入注册的手机号码',
+                      hintText: '11位注册手机号码',
+                      counterText: '',
                     ),
+                    keyboardType: TextInputType.number,
+                    maxLength: 11,
+                    onChanged: (String value) {
+                      validator();
+                    },
                   ),
                   TextField(
                     controller: passwordController,
                     autofocus: false,
                     maxLines: 1,
                     decoration: InputDecoration(
-                      hintText: '请输入登录密码',
+                      hintText: '6-12位登录密码',
+                      counterText: '',
                     ),
                     obscureText: true,
+                    keyboardType: TextInputType.number,
+                    maxLength: 12,
+                    onChanged: (String value) {
+                      validator();
+                    },
                   ),
                 ],
               ),
@@ -90,12 +114,12 @@ class _LogonState extends State<Logon> {
                     ),
                     color: Colors.black87,
                     borderRadius: BorderRadius.all(Radius.circular(50)),
-                    onPressed: () {
+                    onPressed: !isButtonDisabled ? () {
                       requestLogon({
-                        'name': uerNameController.text,
+                        'name': userNameController.text,
                         'password': passwordController.text,
                       });
-                    },
+                    } : null,
                   ),
                 ],
               ),

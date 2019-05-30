@@ -8,9 +8,20 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
-  final uerNameController = TextEditingController();
+  final userNameController = TextEditingController();
 
   final passwordController = TextEditingController();
+
+  bool isButtonDisabled = true;
+
+  void validator() {
+    RegExp userNameReg = new RegExp(r'(\d{11})');
+    RegExp passwordReg = new RegExp(r'(\d{6,12})');
+
+    setState(() {
+      isButtonDisabled = userNameReg.hasMatch(userNameController.text) && passwordReg.hasMatch(passwordController.text) ? false : true;
+    });
+  }
 
   void requestLogin (params) async {
     var json = await HttpUtil.request(
@@ -41,7 +52,7 @@ class _LoginState extends State<Login> {
         ),
       );
     }else{
-      Navigator.pushNamed(context, '/list');
+      Navigator.of(context).pushNamedAndRemoveUntil('/list', (Route<dynamic> route) => false);
     }
   }
 
@@ -56,12 +67,18 @@ class _LoginState extends State<Login> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   TextField(
-                    controller: uerNameController,
+                    controller: userNameController,
                     autofocus: false,
                     maxLines: 1,
                     decoration: InputDecoration(
                       hintText: '请输入手机号码',
+                      counterText: '',
                     ),
+                    keyboardType: TextInputType.number,
+                    maxLength: 11,
+                    onChanged: (String value) {
+                      validator();
+                    },
                   ),
                   TextField(
                     controller: passwordController,
@@ -69,8 +86,14 @@ class _LoginState extends State<Login> {
                     maxLines: 1,
                     decoration: InputDecoration(
                       hintText: '请输入密码',
+                      counterText: '',
                     ),
                     obscureText: true,
+                    keyboardType: TextInputType.number,
+                    maxLength: 12,
+                    onChanged: (String value) {
+                      validator();
+                    },
                   ),
                 ],
               ),
@@ -90,12 +113,12 @@ class _LoginState extends State<Login> {
                     ),
                     color: Colors.black87,
                     borderRadius: BorderRadius.all(Radius.circular(50)),
-                    onPressed: () {
+                    onPressed: !isButtonDisabled ? () {
                       requestLogin({
-                        'name': uerNameController.text,
+                        'name': userNameController.text,
                         'password': passwordController.text,
                       });
-                    },
+                    } : null,
                   ),
                 ],
               ),
