@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'dart:convert';
 import '../../utils/userInfo.dart';
 import '../../utils/httpUtil.dart';
+import '../../widgets/dialog.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -37,21 +38,11 @@ class _LoginState extends State<Login> {
     }
 
     if(json['result'] != 100) {
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          content: Text(
-            json['message'],
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('重试', style: TextStyle(color: Colors.black),),
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-            ),
-          ],
-        ),
+      MyDialog.show(
+        context,
+        content: json['message'],
+        okName: '重试',
+        isHideCancel: true,
       );
     }else{
       UserInfo.updateUserInfo(jsonEncode(json['data']));

@@ -24,11 +24,15 @@ class _AddArticleState extends State<AddArticle> {
         ],
       ),
       body: new Container(
-        child: new TextField(
-          controller: controller,
-          autofocus: true,
-          enableInteractiveSelection: true,
-          maxLines: 99,
+        child: Column(
+          children: <Widget>[
+            TextField(
+              controller: controller,
+              autofocus: true,
+              enableInteractiveSelection: true,
+              maxLines: 99,
+            ),
+          ],
         ),
       ),
     );

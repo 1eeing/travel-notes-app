@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import '../../utils/httpUtil.dart';
+import '../../widgets/dialog.dart';
 
 class Logon extends StatefulWidget {
   @override
@@ -36,38 +37,20 @@ class _LogonState extends State<Logon> {
     }
 
     if(json['result'] != 100){
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          content: Text(
-            json['message'],
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('确定', style: TextStyle(color: Colors.black),),
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-            ),
-          ],
-        ),
+      MyDialog.show(
+        context,
+        content: json['message'],
+        isHideCancel: true,
       );
     }else{
-      showDialog(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          content: Text(
-            '注册成功！',
-          ),
-          actions: <Widget>[
-            FlatButton(
-              child: Text('确定', style: TextStyle(color: Colors.black),),
-              onPressed: () {
-                Navigator.of(ctx).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
-              },
-            ),
-          ],
-        ),
+      MyDialog.show(
+        context,
+        content: '注册成功',
+        isHideCancel: true,
+        onOk: (ctx) {
+          Navigator.of(ctx).pop();
+          Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
+        }
       );
     }
   }
