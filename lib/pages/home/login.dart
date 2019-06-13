@@ -18,8 +18,8 @@ class _LoginState extends State<Login> {
   bool isButtonDisabled = true;
 
   void validator() {
-    RegExp userNameReg = new RegExp(r'(\d{11})');
-    RegExp passwordReg = new RegExp(r'(\d{6,12})');
+    RegExp userNameReg = RegExp(r'(\d{11})');
+    RegExp passwordReg = RegExp(r'(\d{6,12})');
 
     setState(() {
       isButtonDisabled = userNameReg.hasMatch(userNameController.text) && passwordReg.hasMatch(passwordController.text) ? false : true;

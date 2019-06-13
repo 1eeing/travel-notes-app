@@ -11,7 +11,6 @@ class List extends StatefulWidget {
 class _ListState extends State<List> {
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     getRequestList();
   }
@@ -79,7 +78,7 @@ class _ListState extends State<List> {
     final _picUrl = item['picUrl'];
     final _likeNum = item['likeNum'];
 
-    return new ListItemTile(
+    return ListItemTile(
       title: _title,
       subTitle: _subTitle,
       picUrl: _picUrl,
@@ -89,15 +88,15 @@ class _ListState extends State<List> {
 
   @override
   Widget build(BuildContext context) {
-    return new Container(
-      child: new CustomScrollView(
+    return Container(
+      child: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
             title: Text('浪漫旅行'),
             actions: <Widget>[
               IconButton(
                 icon: const Icon(Icons.supervised_user_circle),
-                tooltip: 'Add new entry',
+                tooltip: 'Add entry',
                 onPressed: () {
                   Navigator.pushNamed(context, '/userInfo');
                 },
@@ -105,7 +104,7 @@ class _ListState extends State<List> {
             ],
           ),
           SliverPadding(
-            padding: new EdgeInsets.symmetric(horizontal: 16.0),
+            padding: EdgeInsets.symmetric(horizontal: 16.0),
             sliver: SliverList(
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {

@@ -16,17 +16,17 @@ class ListItemTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new GestureDetector(
+    return GestureDetector(
       onTap: () {
         Navigator.pushNamed(context, '/articleDetail');
       },
-      child: new Card(
-        child: new Column(
+      child: Card(
+        child: Column(
           children: <Widget>[
-            new Container(
-              child: new Text(
+            Container(
+              child: Text(
                 '$likeNum 人喜欢',
-                style: new TextStyle(
+                style: TextStyle(
                   fontSize: 18.0,
                   color: Colors.grey[500]
                 ),
@@ -34,21 +34,21 @@ class ListItemTile extends StatelessWidget {
               ),
               height: 60,
               alignment: Alignment.centerLeft,
-              padding: new EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.symmetric(horizontal: 16.0),
             ),
-            new Container(
-              child: new Image.network(
+            picUrl != null ? Container(
+              child: Image.network(
                 picUrl,
                 fit: BoxFit.cover,
               ),
               height: 200,
               width: double.infinity,
-            ),
-            new Container(
-              child: new Text(
+            ) : null,
+            Container(
+              child: Text(
                 title,
                 textAlign: TextAlign.left,
-                style: new TextStyle(
+                style: TextStyle(
                   fontSize: 22.0,
                   color: Colors.black
                 ),
@@ -56,13 +56,13 @@ class ListItemTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               alignment: Alignment.centerLeft,
-              padding: new EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
+              padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
             ),
-            new Container(
-              child: new Text(
+            subTitle != null ? Container(
+              child: Text(
                 subTitle,
                 textAlign: TextAlign.left,
-                style: new TextStyle(
+                style: TextStyle(
                   fontSize: 16.0,
                   color: Colors.grey[500]
                 ),
@@ -70,11 +70,11 @@ class ListItemTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
               alignment: Alignment.centerLeft,
-              padding: new EdgeInsets.all(16.0),
-            ),
+              padding: EdgeInsets.all(16.0),
+            ) : null,
           ],
         ),
-        margin: new EdgeInsets.symmetric(vertical: 8.0),
+        margin: EdgeInsets.symmetric(vertical: 8.0),
       ),
     );
   }
