@@ -73,6 +73,7 @@ class HttpUtil {
 
       var result;
 
+      // todo 错误处理优化
       try {
         Response response = await dio.request(url, data: data, options: new Options(method: method));
 

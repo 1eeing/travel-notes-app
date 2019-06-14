@@ -9,7 +9,7 @@ import './pages/home/logon.dart';
 // import 'package:flutter/services.dart';
 
 void main() {
-  runApp(new MyApp());
+  runApp(MyApp());
   // SystemUiOverlayStyle systemUiOverlayStyle = SystemUiOverlayStyle(
   //   statusBarColor: Colors.transparent
   // );
@@ -19,20 +19,19 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
+    return MaterialApp(
       title: '旅行游记',
-      theme: new ThemeData(
+      theme: ThemeData(
         primaryColor: Colors.white,
       ),
       initialRoute: '/',
-      routes: {
-        '/': (BuildContext context) => new Home(),
-        '/login': (BuildContext context) => new Login(),
-        '/logon': (BuildContext context) => new Logon(),
-        '/list': (BuildContext context) => new ListContainer(),
-        '/articleDetail': (BuildContext context) => new ArticleDetail(),
-        '/userInfo': (BuildContext context) => new UserInfoPage(),
-        '/addArticle': (BuildContext context) => new AddArticle(),
+      routes: { // 静态路由，不支持传参
+        '/': (BuildContext context) => Home(),
+        '/login': (BuildContext context) => Login(),
+        '/logon': (BuildContext context) => Logon(),
+        '/list': (BuildContext context) => ListContainer(),
+        '/userInfo': (BuildContext context) => UserInfoPage(),
+        '/addArticle': (BuildContext context) => AddArticle(),
       },
     );
   }

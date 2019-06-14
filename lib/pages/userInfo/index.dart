@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'dart:convert';
 import '../../utils/httpUtil.dart';
 import '../../utils/userInfo.dart';
-import '../../widgets/dividedContainer.dart';
+import '../../widgets/divided_container.dart';
+import '../../widgets/dialog.dart';
 
 class UserInfoPage extends StatefulWidget {
   @override
@@ -23,7 +23,7 @@ class _UserInfoPageState extends State<UserInfoPage> {
   int userId;
 
   void getUserInfo() async {
-    userInfo = jsonDecode(await UserInfo.getUserInfo());
+    userInfo = await UserInfo.getUserInfo();
     setState(() {
       userName = userInfo['name'];
       picUrl = userInfo['picUrl'] ?? 'https://img.alicdn.com/imgextra/i4/69942425/O1CN01N8clmB1Tmgz5LvAS6_!!69942425.jpg';
@@ -46,21 +46,11 @@ class _UserInfoPageState extends State<UserInfoPage> {
         return;
       }
       if(json['result'] != 100){
-        showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            content: Text(
-              json['message'],
-            ),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('重试', style: TextStyle(color: Colors.black),),
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                },
-              ),
-            ],
-          ),
+        MyDialog.show(
+          context,
+          content: json['message'],
+          okName: '重试',
+          isHideCancel: true,
         );
       }else{
         Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);

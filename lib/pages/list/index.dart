@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import './list.dart';
-// import './my-drawer.dart';
+import './article_list.dart';
+// import './my_drawer.dart';
 
 class ListContainer extends StatefulWidget {
   @override
@@ -10,21 +10,21 @@ class ListContainer extends StatefulWidget {
 class _ListContainerState extends State<ListContainer> {
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return Scaffold(
       // backgroundColor: Colors.transparent,
       // appBar: AppBar(
-      //   title: new Text('浪漫旅行',),
+      //   title: Text('浪漫旅行',),
       //   backgroundColor: Colors.transparent,
       //   elevation: 0,
       // ),
-      body: new List(),
-      floatingActionButton: new FloatingActionButton(
+      body: ArticleList(),
+      floatingActionButton: FloatingActionButton(
         onPressed: () {
           Navigator.pushNamed(context, '/addArticle');
         },
         child: Icon(Icons.mode_edit),
       ),
-      // drawer: new MyDrawer(),
+      // drawer: MyDrawer(),
     );
   }
 }

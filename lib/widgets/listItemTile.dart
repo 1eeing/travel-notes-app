@@ -1,16 +1,21 @@
 import 'package:flutter/material.dart';
+import '../pages/articleDetail/index.dart';
 
 class ListItemTile extends StatelessWidget {
   const ListItemTile({
     Key key,
+    this.articleId,
     this.title,
     this.subTitle,
+    this.content,
     this.picUrl,
     this.likeNum
   }) : super(key: key);
 
+  final int articleId;
   final String title;
   final String subTitle;
+  final String content;
   final String picUrl;
   final int likeNum;
 
@@ -18,7 +23,12 @@ class ListItemTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Navigator.pushNamed(context, '/articleDetail');
+        // 动态路由，可以传参
+        Navigator.push(context, MaterialPageRoute(
+          builder: (BuildContext ctx) {
+            return ArticleDetail(articleId: articleId);
+          })
+        );
       },
       child: Card(
         child: Column(
@@ -43,7 +53,7 @@ class ListItemTile extends StatelessWidget {
               ),
               height: 200,
               width: double.infinity,
-            ) : null,
+            ) : Container(),
             Container(
               child: Text(
                 title,
@@ -58,9 +68,9 @@ class ListItemTile extends StatelessWidget {
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 0),
             ),
-            subTitle != null ? Container(
+            Container(
               child: Text(
-                subTitle,
+                subTitle ?? content,
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 16.0,
@@ -71,7 +81,7 @@ class ListItemTile extends StatelessWidget {
               ),
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.all(16.0),
-            ) : null,
+            ),
           ],
         ),
         margin: EdgeInsets.symmetric(vertical: 8.0),
