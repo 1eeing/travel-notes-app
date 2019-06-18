@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
 import '../../utils/userInfo.dart';
 import '../../utils//httpUtil.dart';
 import '../../widgets/dialog.dart';
+import '../../widgets/pick_img_sheet.dart';
 
 class AddArticle extends StatefulWidget {
   AddArticle({
@@ -30,6 +32,7 @@ class _AddArticleState extends State<AddArticle> {
   void initState() {
     super.initState();
     getUserId();
+    pickImgSheet = PickImgSheet(context: context);
   }
 
   final TextEditingController titleController = TextEditingController();
@@ -37,6 +40,7 @@ class _AddArticleState extends State<AddArticle> {
   final TextEditingController picUrlController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
   int userId;
+  PickImgSheet pickImgSheet;
 
   void getUserId() async {
     int id = await UserInfo.getUserItem('id');
@@ -205,12 +209,40 @@ class _AddArticleState extends State<AddArticle> {
               ),
               maxLength: 30,
             ),
+            // Container(
+            //   width: double.infinity,
+            //   child: Row(
+            //     children: <Widget>[
+            //       Expanded(
+            //         child: TextField(
+            //           enabled: false,
+            //           decoration: InputDecoration(
+            //             hintText: '点击上传图片',
+            //             counterText: '',
+            //             disabledBorder: InputBorder.none
+            //           ),
+            //         ),
+            //       ),
+            //       IconButton(
+            //         icon: Icon(Icons.add_a_photo),
+            //         onPressed: () {
+            //           pickImgSheet.show((File imgFile) {
+            //             print(imgFile);
+            //           });
+            //         },
+            //       ),
+            //     ],
+            //   ),
+            //   decoration: BoxDecoration(
+            //     border: Border(bottom: BorderSide(color: Colors.black54))
+            //   ),
+            // ),
             TextField(
               controller: picUrlController,
               autofocus: false,
               maxLines: 1,
               decoration: InputDecoration(
-                hintText: '请输入封面链接，例如：http://xxx.jpg',
+                hintText: '请填写图片链接，如http://test.png',
                 counterText: '',
               ),
               maxLength: 100,

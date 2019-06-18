@@ -27,6 +27,7 @@ dependencies:
   dio: ^2.1.0
   shared_preferences: ^0.5.0
   zefyr: ^0.5.0
+  image_picker: ^0.5.0
 
 dev_dependencies:
   flutter_test:
