@@ -26,7 +26,13 @@ class ListItemTile extends StatelessWidget {
         // 动态路由，可以传参
         Navigator.push(context, MaterialPageRoute(
           builder: (BuildContext ctx) {
-            return ArticleDetail(articleId: articleId);
+            return ArticleDetail(
+              articleId: articleId,
+              title: title,
+              subTitle: subTitle,
+              picUrl: picUrl,
+              content: content,
+            );
           })
         );
       },
@@ -46,7 +52,7 @@ class ListItemTile extends StatelessWidget {
               alignment: Alignment.centerLeft,
               padding: EdgeInsets.symmetric(horizontal: 16.0),
             ),
-            picUrl != null ? Container(
+            picUrl != "" ? Container(
               child: Image.network(
                 picUrl,
                 fit: BoxFit.cover,
@@ -70,7 +76,7 @@ class ListItemTile extends StatelessWidget {
             ),
             Container(
               child: Text(
-                subTitle ?? content,
+                subTitle != "" ? subTitle : content,
                 textAlign: TextAlign.left,
                 style: TextStyle(
                   fontSize: 16.0,

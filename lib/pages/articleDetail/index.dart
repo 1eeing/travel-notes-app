@@ -8,9 +8,17 @@ class ArticleDetail extends StatefulWidget {
   ArticleDetail({
     Key key,
     this.articleId,
+    this.title,
+    this.subTitle,
+    this.picUrl,
+    this.content,
   }) : super(key: key);
 
   final int articleId;
+  final String title;
+  final String subTitle;
+  final String picUrl;
+  final String content;
 
   @override
   _ArticleDetailState createState() => _ArticleDetailState();
@@ -41,10 +49,28 @@ class _ArticleDetailState extends State<ArticleDetail> {
     });
   }
 
+  getDefaultArticleDetail() {
+    setState(() {
+      if(widget.title != null){
+        title = widget.title;
+      }
+      if(widget.subTitle != null){
+        subTitle = widget.subTitle;
+      }
+      if(widget.picUrl != null){
+        picUrl = widget.picUrl;
+      }
+      if(widget.content != null){
+        content = widget.content;
+      }
+    });
+  }
+
   void getArticleDetail() async {
     if(widget.articleId == null){
       return;
     }
+    getDefaultArticleDetail();
     var json = await HttpUtil(context).request(
       '/posts/:id',
       method: HttpUtil.GET,
@@ -75,65 +101,73 @@ class _ArticleDetailState extends State<ArticleDetail> {
     }
   }
 
+  Future<Null> _refresh() async {
+    getArticleDetail();
+    return;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        child: CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              title: Text(title),
-              actions: <Widget>[
-                userId == authorId && userId != null && authorId != null ? IconButton(
-                  icon: Icon(Icons.edit),
-                  tooltip: 'Edit this article',
-                  onPressed: () {
-                    Navigator.push(context, MaterialPageRoute(
-                      builder: (BuildContext ctx) {
-                        return AddArticle(
-                          title: title,
-                          subTitle: subTitle,
-                          picUrl: picUrl,
-                          content: content,
-                          authorId: authorId,
-                          articleId: widget.articleId,
-                        );
-                      })
+        child: RefreshIndicator(
+          onRefresh: _refresh,
+          child: CustomScrollView(
+            slivers: <Widget>[
+              SliverAppBar(
+                title: Text(title),
+                actions: <Widget>[
+                  userId == authorId && userId != null && authorId != null ? IconButton(
+                    icon: Icon(Icons.edit),
+                    tooltip: 'Edit this article',
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(
+                        builder: (BuildContext ctx) {
+                          return AddArticle(
+                            title: title,
+                            subTitle: subTitle,
+                            picUrl: picUrl,
+                            content: content,
+                            authorId: authorId,
+                            articleId: widget.articleId,
+                          );
+                        })
+                      );
+                    },
+                  ) : IconButton(
+                    icon: Icon(Icons.favorite_border),
+                    onPressed: () {
+                      // todo 点赞
+                    },
+                  ),
+                ],
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (BuildContext context, int index) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        picUrl != "" ? Container(
+                          child: Image.network(picUrl),
+                        ) : Container(),
+                        subTitle != "" ? Container(
+                          child: Text(subTitle, style: subTitleStyle,),
+                          padding: EdgeInsets.fromLTRB(10.0, 10.0,10.0, 0),
+                        ) : Container(),
+                        Container(
+                          child: Text(content, style: contentStyle,),
+                          padding: EdgeInsets.fromLTRB(10.0, 10.0,10.0, 0),
+                        ),
+                      ],
                     );
                   },
-                ) : IconButton(
-                  icon: Icon(Icons.favorite_border),
-                  onPressed: () {
-                    // todo 点赞
-                  },
+                  childCount: 1,
                 ),
-              ],
-            ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      picUrl != null ? Container(
-                        child: Image.network(picUrl),
-                      ) : Container(),
-                      subTitle != null ? Container(
-                        child: Text(subTitle, style: subTitleStyle,),
-                        padding: EdgeInsets.all(10.0),
-                      ) : Container(),
-                      Container(
-                        child: Text(content, style: contentStyle,),
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
-                      ),
-                    ],
-                  );
-                },
-                childCount: 1,
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        )
       ),
     );
   }

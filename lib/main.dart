@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import './pages/list/index.dart';
-import './pages/articleDetail/index.dart';
 import './pages/userInfo/index.dart';
 import './pages/addArticle/index.dart';
 import './pages/home/index.dart';
