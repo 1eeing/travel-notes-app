@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -12,8 +14,8 @@ class HttpUtil {
 
   // default options
   static const String API_PREFIX = 'http://127.0.0.1:7001';
-  static const int CONNECT_TIMEOUT = 10000;
-  static const int RECEIVE_TIMEOUT = 3000;
+  static const int CONNECT_TIMEOUT = 20000;
+  static const int RECEIVE_TIMEOUT = 10000;
 
   // http request methods
   static const String GET = 'get';
@@ -25,10 +27,15 @@ class HttpUtil {
   // request method
   Future<Map> request (
     String url, 
-    { data, method }) async {
-
+    {
+      data,
+      method,
+      ContentType contentType,
+    }
+  ) async {
       data = data ?? {};
       method = method ?? 'GET';
+      contentType = contentType ?? ContentType.json;
 
       // restful 请求处理   
       // /gysw/search/hist/:user_id        user_id=27
@@ -75,7 +82,7 @@ class HttpUtil {
 
       // todo 错误处理优化
       try {
-        Response response = await dio.request(url, data: data, options: new Options(method: method));
+        Response response = await dio.request(url, data: data, options: new Options(method: method, contentType: contentType));
 
         result = response.data;
 

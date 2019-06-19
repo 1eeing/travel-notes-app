@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
 import 'dart:io';
 import '../../utils/userInfo.dart';
 import '../../utils//httpUtil.dart';
@@ -37,10 +38,10 @@ class _AddArticleState extends State<AddArticle> {
 
   final TextEditingController titleController = TextEditingController();
   final TextEditingController subTitleController = TextEditingController();
-  final TextEditingController picUrlController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
   int userId;
   PickImgSheet pickImgSheet;
+  File coverPicFile;
 
   void getUserId() async {
     int id = await UserInfo.getUserItem('id');
@@ -59,9 +60,6 @@ class _AddArticleState extends State<AddArticle> {
     }
     if(widget.subTitle != null){
       subTitleController.text = widget.subTitle;
-    }
-    if(widget.picUrl != null){
-      picUrlController.text = widget.picUrl;
     }
     if(widget.content != null){
       contentController.text = widget.content;
@@ -96,16 +94,19 @@ class _AddArticleState extends State<AddArticle> {
     if(!validatorParams()){
       return;
     }
+    List splitFilePath = coverPicFile.path.split('.');
+    String extname = splitFilePath.last;
+    FormData formData = FormData.from({
+      'title': titleController.text,
+      'subTitle': subTitleController.text,
+      'content': contentController.text,
+      'authorId': userId,
+      'coverPicUrl': coverPicFile == null ? null : UploadFileInfo(coverPicFile, DateTime.now().millisecondsSinceEpoch.toString() + '.' + extname),
+    });
     var json = await HttpUtil(context).request(
       '/posts',
       method: HttpUtil.POST,
-      data: {
-        'title': titleController.text,
-        'subTitle': subTitleController.text,
-        'coverPicUrl': picUrlController.text,
-        'content': contentController.text,
-        'authorId': userId,
-      }
+      data: formData,
     );
 
     if(json == null){
@@ -138,17 +139,20 @@ class _AddArticleState extends State<AddArticle> {
       return;
     }
 
+    List splitFilePath = coverPicFile.path.split('.');
+    String extname = splitFilePath.last;
+    FormData formData = FormData.from({
+      'id': widget.articleId,
+      'title': titleController.text,
+      'subTitle': subTitleController.text,
+      'content': contentController.text,
+      'authorId': userId,
+      'coverPicUrl': UploadFileInfo(coverPicFile, DateTime.now().millisecondsSinceEpoch.toString() + '.' + extname),
+    });
     var json = await HttpUtil(context).request(
       '/posts/:id',
-      method: HttpUtil.PUT,
-      data: {
-        'id': widget.articleId,
-        'title': titleController.text,
-        'subTitle': subTitleController.text,
-        'coverPicUrl': picUrlController.text,
-        'content': contentController.text,
-        'authorId': userId,
-      }
+      method: HttpUtil.POST,
+      data: formData
     );
 
     if(json == null){
@@ -209,43 +213,32 @@ class _AddArticleState extends State<AddArticle> {
               ),
               maxLength: 30,
             ),
-            // Container(
-            //   width: double.infinity,
-            //   child: Row(
-            //     children: <Widget>[
-            //       Expanded(
-            //         child: TextField(
-            //           enabled: false,
-            //           decoration: InputDecoration(
-            //             hintText: '点击上传图片',
-            //             counterText: '',
-            //             disabledBorder: InputBorder.none
-            //           ),
-            //         ),
-            //       ),
-            //       IconButton(
-            //         icon: Icon(Icons.add_a_photo),
-            //         onPressed: () {
-            //           pickImgSheet.show((File imgFile) {
-            //             print(imgFile);
-            //           });
-            //         },
-            //       ),
-            //     ],
-            //   ),
-            //   decoration: BoxDecoration(
-            //     border: Border(bottom: BorderSide(color: Colors.black54))
-            //   ),
-            // ),
-            TextField(
-              controller: picUrlController,
-              autofocus: false,
-              maxLines: 1,
-              decoration: InputDecoration(
-                hintText: '请填写图片链接，如http://test.png',
-                counterText: '',
+            Container(
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(vertical: 16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  coverPicFile == null ? Image.network(
+                    widget.picUrl ?? 'http://ptc0b5jyp.bkt.clouddn.com/timg.jpeg',
+                    width: 100.0,
+                  ) : Image.file(
+                    coverPicFile,
+                    width: 100.0,
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.add_a_photo),
+                    onPressed: () {
+                      pickImgSheet.show((File imgFile) {
+                        coverPicFile = imgFile;
+                      });
+                    },
+                  ),
+                ],
               ),
-              maxLength: 100,
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: Colors.black54))
+              ),
             ),
             Expanded(
               child: TextField(
