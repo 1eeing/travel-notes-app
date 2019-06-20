@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      initialRoute: '/',
+      initialRoute: '/list',
       routes: { // 静态路由，不支持传参
         '/': (BuildContext context) => Home(),
         '/login': (BuildContext context) => Login(),

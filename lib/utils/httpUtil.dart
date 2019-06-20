@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import 'package:path_provider/path_provider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cookie_jar/cookie_jar.dart';
@@ -54,7 +54,9 @@ class HttpUtil {
 
       // 添加拦截器
       // String csrfToken;
-      dio.interceptors.add(CookieManager(CookieJar()));
+      Directory tempDir = await getTemporaryDirectory();
+      String tempPath = tempDir.path;
+      dio.interceptors.add(CookieManager(PersistCookieJar(dir: '$tempPath/.cookies/')));
       // dio.interceptors.add(InterceptorsWrapper(
       //   onRequest: (Options options) {
       //     if(csrfToken == null) {
