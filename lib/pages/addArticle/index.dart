@@ -94,19 +94,22 @@ class _AddArticleState extends State<AddArticle> {
     if(!validatorParams()){
       return;
     }
-    List splitFilePath = coverPicFile.path.split('.');
-    String extname = splitFilePath.last;
-    FormData formData = FormData.from({
+    Map<String, dynamic> params = {
       'title': titleController.text,
       'subTitle': subTitleController.text,
       'content': contentController.text,
       'authorId': userId,
-      'coverPicUrl': coverPicFile == null ? null : UploadFileInfo(coverPicFile, DateTime.now().millisecondsSinceEpoch.toString() + '.' + extname),
-    });
+    };
+    if(coverPicFile != null){
+      List splitFilePath = coverPicFile.path.split('.');
+      String extname = splitFilePath.last;
+      params['coverPicUrl'] = UploadFileInfo(coverPicFile, DateTime.now().millisecondsSinceEpoch.toString() + '.' + extname);
+    }
+    
     var json = await HttpUtil(context).request(
       '/posts',
       method: HttpUtil.POST,
-      data: formData,
+      data: FormData.from(params),
     );
 
     if(json == null){
@@ -139,20 +142,23 @@ class _AddArticleState extends State<AddArticle> {
       return;
     }
 
-    List splitFilePath = coverPicFile.path.split('.');
-    String extname = splitFilePath.last;
-    FormData formData = FormData.from({
+    Map<String, dynamic> params = {
       'id': widget.articleId,
       'title': titleController.text,
       'subTitle': subTitleController.text,
       'content': contentController.text,
       'authorId': userId,
-      'coverPicUrl': UploadFileInfo(coverPicFile, DateTime.now().millisecondsSinceEpoch.toString() + '.' + extname),
-    });
+    };
+    if(coverPicFile != null){
+      List splitFilePath = coverPicFile.path.split('.');
+      String extname = splitFilePath.last;
+      params['coverPicUrl'] = UploadFileInfo(coverPicFile, DateTime.now().millisecondsSinceEpoch.toString() + '.' + extname);
+    }
+
     var json = await HttpUtil(context).request(
       '/posts/:id',
-      method: HttpUtil.POST,
-      data: formData
+      method: HttpUtil.PUT,
+      data: FormData.from(params),
     );
 
     if(json == null){
