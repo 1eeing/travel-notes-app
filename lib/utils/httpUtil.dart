@@ -14,8 +14,8 @@ class HttpUtil {
 
   // default options
   static const String API_PREFIX = 'http://127.0.0.1:7001';
-  static const int CONNECT_TIMEOUT = 20000;
-  static const int RECEIVE_TIMEOUT = 10000;
+  static const int CONNECT_TIMEOUT = 50000;
+  static const int RECEIVE_TIMEOUT = 30000;
 
   // http request methods
   static const String GET = 'get';
