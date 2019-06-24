@@ -13,7 +13,7 @@ class HttpUtil {
   static Dio dio;
 
   // default options
-  static const String API_PREFIX = 'http://127.0.0.1:7001';
+  static const String API_PREFIX = 'http://47.106.191.109:7001';
   static const int CONNECT_TIMEOUT = 20000;
   static const int RECEIVE_TIMEOUT = 10000;
 
